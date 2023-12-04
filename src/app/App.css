@@ -1,0 +1,77 @@
+.header-style {
+    height: 170px;
+    padding: 0;
+    position: relative;
+}
+
+.background-style {
+    background: url(../../public/ghibli-header.jpg) no-repeat center / cover;
+    background-position: 0 61%;
+    width: 100%;
+    height: 100%;
+}
+
+.paragraph-style {
+    font-size: 60px;
+    color: #000;
+    text-shadow: #fff 2px -2px 3px;
+    position: absolute;
+    left: 4%;
+    bottom: 20%;
+    font-family: PermanentMarkerRegular;
+}
+
+.content-style {
+    min-height: 700px;
+    background: linear-gradient(90deg, rgba(153,216,184,1) 0%, rgba(77,138,19,1) 100%);
+    padding-top: 5px;
+}
+
+.footer-style {
+    background: linear-gradient(90deg, rgba(153,216,184,1) 0%, rgba(77,138,19,1) 100%);
+}
+
+.flexible-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ant-tabs-nav {
+    background: linear-gradient(90deg, rgba(153,216,184,1) 0%, rgba(77,138,19,1) 100%);
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 0;
+}
+
+.ant-tabs-top >.ant-tabs-nav::before {
+    border: 0;
+}
+
+.ant-tabs >.ant-tabs-nav {
+    margin-bottom: 0;
+}
+
+.ant-tabs-content-holder {
+    background-color: #ffffe0;
+    padding-top: 15px;
+    border-radius: 10px;
+}
+
+#rc-tabs-1-panel-2 {
+    min-height: 20vh;
+}
+
+.select-a-favorite {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.select-a-favorite-text {
+    font-size: 30px;
+    font-family: PermanentMarkerRegular;
+}
+
+.select-a-favorite-icon {
+    font-size: 50px;
+}
