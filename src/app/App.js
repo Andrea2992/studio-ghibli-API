@@ -1,16 +1,15 @@
 import './App.css';
 import { Layout, Tabs, ConfigProvider, } from 'antd';
 import { BookOutlined, HeartOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import filmList from '../api-response/filmList';
 import FilmItem from '../film-item/FilmItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const { Header, Footer, Content } = Layout;
 
 
-
-function getFilmDataFromAPI() {
-  const apiData = filmList();
+async function getFilmDataFromAPI() {
+  var response = await fetch('https://ghibliapi.vercel.app/films/');
+  var apiData = await response.json();
   const filmData = apiData.map((data) => {
     return {
       id: data.id,
@@ -28,8 +27,6 @@ function getFilmDataFromAPI() {
   return filmData;
 }
 
-
-const filmDataAPI = getFilmDataFromAPI();
 
 
 function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavoriteDelete }) {
@@ -63,12 +60,16 @@ function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavorit
 
 
 function App() {
-  const [filmData, setFilmsData] = useState(filmDataAPI)
+  const [filmData, setFilmsData] = useState([])
   const [favoriteList, setFavoriteList] = useState([]);
+
+  useEffect(() => {
+    getFilmDataFromAPI().then((response) => setFilmsData(response))
+  }, [])
 
   const updateFavoriteList = (id) => {
     const selectedFilm = filmData.find(function (film) {
-      return film.id == id;
+      return film.id === id;
     });
     const newList = [
       ...favoriteList,
@@ -80,9 +81,9 @@ function App() {
   const updateFavoriteValue = (id) => {
     const newList = [...filmData];
     const selectedFilm = newList.find(function (film) {
-      return film.id == id;
+      return film.id === id;
     });
-    if (selectedFilm['heart_icon'] == true) {
+    if (selectedFilm['heart_icon'] === true) {
       selectedFilm['heart_icon'] = false;
     } else {
       selectedFilm['heart_icon'] = true;
@@ -98,7 +99,7 @@ function App() {
   }
 
   function FavoriteList() {
-    if (favoriteList.length == 0) {
+    if (favoriteList.length === 0) {
       return (
         <>
           <InfoCircleOutlined className='select-a-favorite select-a-favorite-icon' />
