@@ -1,4 +1,5 @@
 import TextLimiter from '../text-limiter/TextLimiter';
+import { deleteFavoriteToLocalStorage, saveFavoriteToLocalStorage } from '../util/util';
 import './FilmItem.css';
 import { HeartTwoTone, HeartFilled } from '@ant-design/icons';
 
@@ -10,12 +11,13 @@ const {id, title, image, description, director, producer, releaseDate, runningTi
     return (
         <div className='card-properties'>
             <div className='heart-position'>
-                {heartIcon == true ? (
+                {heartIcon === true ? (
                     <HeartTwoTone
                         style={{ fontSize: '30px' }}
                         onClick={() => {
                             onFavoriteValueUpdate(id)
                             onFavoriteListUpdate(id)
+                            saveFavoriteToLocalStorage(id)
                         }}
                     />
                 ) : <HeartFilled
@@ -23,6 +25,7 @@ const {id, title, image, description, director, producer, releaseDate, runningTi
                         onClick={() => {
                             onFavoriteValueUpdate(id)
                             onFavoriteDelete(id)
+                            deleteFavoriteToLocalStorage(id)
                         }}
                     />
                 }
