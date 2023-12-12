@@ -110,6 +110,8 @@ function App() {
       setFilmsData(newList);
   }
 
+  
+
   const favoriteDelete = (id) => {
     const favoriteIndex = favoriteList.findIndex((t) => t.id === id);
     const tmpFavoriteList = [...favoriteList];

@@ -1,4 +1,5 @@
 import TextLimiter from '../text-limiter/TextLimiter';
+import { deleteFavoriteToLocalStorage, saveFavoriteToLocalStorage } from '../util/util';
 import './FilmItem.css';
 import { HeartTwoTone, HeartFilled } from '@ant-design/icons';
 
@@ -16,6 +17,7 @@ const {id, title, image, description, director, producer, releaseDate, runningTi
                         onClick={() => {
                             onFavoriteValueUpdate(id)
                             onFavoriteListUpdate(id)
+                            saveFavoriteToLocalStorage(id)
                         }}
                     />
                 ) : <HeartFilled
@@ -23,6 +25,7 @@ const {id, title, image, description, director, producer, releaseDate, runningTi
                         onClick={() => {
                             onFavoriteValueUpdate(id)
                             onFavoriteDelete(id)
+                            deleteFavoriteToLocalStorage(id)
                         }}
                     />
                 }
