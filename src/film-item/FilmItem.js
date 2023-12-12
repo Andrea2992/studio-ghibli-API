@@ -10,7 +10,7 @@ const {id, title, image, description, director, producer, releaseDate, runningTi
     return (
         <div className='card-properties'>
             <div className='heart-position'>
-                {heartIcon == true ? (
+                {heartIcon === true ? (
                     <HeartTwoTone
                         style={{ fontSize: '30px' }}
                         onClick={() => {

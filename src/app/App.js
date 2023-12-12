@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 
 const { Header, Footer, Content } = Layout;
 
-
 async function getFilmDataFromAPI() {
   var response = await fetch('https://ghibliapi.vercel.app/films/');
   var apiData = await response.json();
@@ -58,13 +57,31 @@ function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavorit
   )
 }
 
-
 function App() {
   const [filmData, setFilmsData] = useState([])
   const [favoriteList, setFavoriteList] = useState([]);
 
+  function compareApiAndLocalStorageData(response) {
+    let localStorageData = localStorage.getItem("filmsIdArray");
+    if (!localStorageData) {
+      return
+    } else {
+      let favoritesId = JSON.parse(localStorageData);
+      let inLocalStorage = response.filter(film => favoritesId.includes(film.id));
+      favoritesId.forEach(id => {
+        updateFavoriteValue(id, response)
+      });
+      setFavoriteList(inLocalStorage);
+    }
+  }
+
   useEffect(() => {
-    getFilmDataFromAPI().then((response) => setFilmsData(response))
+    getFilmDataFromAPI()
+      .then((response) => {
+        setFilmsData(response)
+        return response
+      })
+      .then((response) => { compareApiAndLocalStorageData(response) })
   }, [])
 
   const updateFavoriteList = (id) => {
@@ -78,17 +95,19 @@ function App() {
     setFavoriteList(newList);
   }
 
-  const updateFavoriteValue = (id) => {
-    const newList = [...filmData];
+
+  const updateFavoriteValue = (id, response) => {
+    const definedResponse = response ?? filmData
+    const newList = [...definedResponse];
     const selectedFilm = newList.find(function (film) {
       return film.id === id;
     });
-    if (selectedFilm['heart_icon'] === true) {
-      selectedFilm['heart_icon'] = false;
-    } else {
-      selectedFilm['heart_icon'] = true;
-    }
-    setFilmsData(newList);
+      if (selectedFilm['heart_icon'] === true) {
+        selectedFilm['heart_icon'] = false;
+      } else {
+        selectedFilm['heart_icon'] = true;
+      }
+      setFilmsData(newList);
   }
 
   const favoriteDelete = (id) => {
@@ -134,8 +153,6 @@ function App() {
       children: <FavoriteList />
     },
   ];
-
-
 
   return (
     <ConfigProvider theme={{
