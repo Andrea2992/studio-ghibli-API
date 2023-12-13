@@ -1,8 +1,9 @@
 import './App.css';
-import { Layout, Tabs, ConfigProvider, } from 'antd';
+import { Layout, Tabs, ConfigProvider, Input } from 'antd';
 import { BookOutlined, HeartOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import FilmItem from '../film-item/FilmItem';
 import { useEffect, useState } from 'react';
+
 
 const { Header, Footer, Content } = Layout;
 
@@ -20,13 +21,12 @@ async function getFilmDataFromAPI() {
       release_date: data.release_date,
       running_time: data.running_time,
       rt_score: data.rt_score,
-      heart_icon: true
+      heart_icon: true,
+      visibility: true
     }
   })
   return filmData;
 }
-
-
 
 function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavoriteDelete }) {
   const films = list.map((item) => {
@@ -40,7 +40,8 @@ function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavorit
       releaseDate: item.release_date,
       runningTime: item.running_time,
       score: item.rt_score,
-      heartIcon: item.heart_icon
+      heartIcon: item.heart_icon,
+      visibility: item.visibility
     }
   })
   const filmItems = films.map((f) =>
@@ -88,13 +89,16 @@ function App() {
     const selectedFilm = filmData.find(function (film) {
       return film.id === id;
     });
+    const copySelectedFilm = { ...selectedFilm }
     const newList = [
       ...favoriteList,
-      selectedFilm
+      copySelectedFilm
     ];
+    newList.forEach(film => {
+      film.visibility = true
+    })
     setFavoriteList(newList);
   }
-
 
   const updateFavoriteValue = (id, response) => {
     const definedResponse = response ?? filmData
@@ -102,15 +106,13 @@ function App() {
     const selectedFilm = newList.find(function (film) {
       return film.id === id;
     });
-      if (selectedFilm['heart_icon'] === true) {
-        selectedFilm['heart_icon'] = false;
-      } else {
-        selectedFilm['heart_icon'] = true;
-      }
-      setFilmsData(newList);
+    if (selectedFilm['heart_icon'] === true) {
+      selectedFilm['heart_icon'] = false;
+    } else {
+      selectedFilm['heart_icon'] = true;
+    }
+    setFilmsData(newList);
   }
-
-  
 
   const favoriteDelete = (id) => {
     const favoriteIndex = favoriteList.findIndex((t) => t.id === id);
@@ -138,16 +140,79 @@ function App() {
     }
   }
 
+  const onChange = (e) => {
+    const value = e.currentTarget.value.toLowerCase();
+    const tempFilmData = [...filmData];
+    if (value == "") {
+      const updatedFilmData = tempFilmData.map(data => {
+        return {
+          id: data.id,
+          title: data.title,
+          image: data.image,
+          description: data.description,
+          director: data.director,
+          producer: data.producer,
+          release_date: data.release_date,
+          running_time: data.running_time,
+          rt_score: data.rt_score,
+          heart_icon: data.heart_icon,
+          visibility: true
+        }
+      });
+      setFilmsData(updatedFilmData);
+    } else {
+      const updatedFilmData = tempFilmData.map(data => {
+        const isTitleSearched = data.title.toLowerCase().includes(value);
+        const isDescriptionSearched = data.description.toLowerCase().includes(value);
+        const isDirectorSearched = data.director.toLowerCase().includes(value);
+        const isProducerSearched = data.producer.toLowerCase().includes(value);
+        const isReleaseSearched = data.release_date.toLowerCase().includes(value);
+        const isVisible = isTitleSearched || isDescriptionSearched ||
+          isDirectorSearched || isProducerSearched || isReleaseSearched;
+        return {
+          id: data.id,
+          title: data.title,
+          image: data.image,
+          description: data.description,
+          director: data.director,
+          producer: data.producer,
+          release_date: data.release_date,
+          running_time: data.running_time,
+          rt_score: data.rt_score,
+          heart_icon: data.heart_icon,
+          visibility: isVisible
+        }
+      });
+      setFilmsData(updatedFilmData);
+    }
+  };
+
   const tabs = [
     {
       label: <span><BookOutlined /> FILMS LIST</span>,
       key: '1',
-      children: <FilmList
-        list={filmData}
-        onFavoriteListUpdate={updateFavoriteList}
-        onFavoriteValueUpdate={updateFavoriteValue}
-        onFavoriteDelete={favoriteDelete}
-      />
+      children:
+        <>
+          <div style={{ "display": "flex", "justifyContent": "center" }}>
+            <Input
+              placeholder="input search text"
+              allowClear
+
+              size="medium"
+              onChange={onChange}
+              style={{
+                minWidth: "300px",
+                width: "400px",
+              }}
+            />
+          </div>
+          <FilmList
+            list={filmData}
+            onFavoriteListUpdate={updateFavoriteList}
+            onFavoriteValueUpdate={updateFavoriteValue}
+            onFavoriteDelete={favoriteDelete}
+          />
+        </>
     },
     {
       label: <span><HeartOutlined /> FAVORITES</span>,

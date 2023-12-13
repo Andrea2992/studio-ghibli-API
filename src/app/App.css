@@ -32,9 +32,10 @@
 }
 
 .flexible-container {
+    width: 100%;
+    margin-left: 5%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .ant-tabs-nav {
@@ -57,13 +58,20 @@
     border-radius: 10px;
 }
 
+#rc-tabs-1-panel-1 {
+    min-height: 200px;
+    padding-bottom: 32px;
+}
+
 #rc-tabs-1-panel-2 {
-    min-height: 20vh;
+    min-height: 200px;
+    padding-top: 32px;
+    padding-bottom: 32px;
 }
 
 .select-a-favorite {
     display: block;
-    margin-top: 30px;
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -75,3 +83,8 @@
 .select-a-favorite-icon {
     font-size: 50px;
 }
+
+/*.ant-space-item {
+    display: block;
+
+}*/
