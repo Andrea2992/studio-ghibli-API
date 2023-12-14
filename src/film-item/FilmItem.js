@@ -12,7 +12,7 @@ export default function FilmItem({ film, onFavoriteListUpdate, onFavoriteValueUp
         return
     } else {
         return (
-
+            <div className='card-properties-container'>
             <div className='card-properties'>
                 <div className='heart-position'>
                     {heartIcon === true ? (
@@ -49,7 +49,7 @@ export default function FilmItem({ film, onFavoriteListUpdate, onFavoriteValueUp
                     </ul>
                 </div>
             </div>
-
+            </div>            
         );
     }
 }

@@ -10,7 +10,7 @@ const { Header, Footer, Content } = Layout;
 async function getFilmDataFromAPI() {
   var response = await fetch('https://ghibliapi.vercel.app/films/');
   var apiData = await response.json();
-  const filmData = apiData.map((data) => {
+  return apiData.map((data) => {
     return {
       id: data.id,
       title: data.title,
@@ -25,7 +25,6 @@ async function getFilmDataFromAPI() {
       visibility: true
     }
   })
-  return filmData;
 }
 
 function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavoriteDelete }) {
@@ -62,17 +61,17 @@ function App() {
   const [filmData, setFilmsData] = useState([])
   const [favoriteList, setFavoriteList] = useState([]);
 
-  function compareApiAndLocalStorageData(response) {
+  function compareApiAndLocalStorageData(apiResponse) {
     let localStorageData = localStorage.getItem("filmsIdArray");
     if (!localStorageData) {
       return
     } else {
       let favoritesId = JSON.parse(localStorageData);
-      let inLocalStorage = response.filter(film => favoritesId.includes(film.id));
+      let favoritesFilmData = apiResponse.filter(film => favoritesId.includes(film.id));
       favoritesId.forEach(id => {
-        updateFavoriteValue(id, response)
+        updateFavoriteValue(id, apiResponse)
       });
-      setFavoriteList(inLocalStorage);
+      setFavoriteList(favoritesFilmData);
     }
   }
 
@@ -94,9 +93,6 @@ function App() {
       ...favoriteList,
       copySelectedFilm
     ];
-    newList.forEach(film => {
-      film.visibility = true
-    })
     setFavoriteList(newList);
   }
 
@@ -141,51 +137,33 @@ function App() {
   }
 
   const onChange = (e) => {
-    const value = e.currentTarget.value.toLowerCase();
+    const searchTextValue = e.currentTarget.value.toLowerCase();
     const tempFilmData = [...filmData];
-    if (value == "") {
-      const updatedFilmData = tempFilmData.map(data => {
-        return {
-          id: data.id,
-          title: data.title,
-          image: data.image,
-          description: data.description,
-          director: data.director,
-          producer: data.producer,
-          release_date: data.release_date,
-          running_time: data.running_time,
-          rt_score: data.rt_score,
-          heart_icon: data.heart_icon,
-          visibility: true
-        }
-      });
-      setFilmsData(updatedFilmData);
-    } else {
-      const updatedFilmData = tempFilmData.map(data => {
-        const isTitleSearched = data.title.toLowerCase().includes(value);
-        const isDescriptionSearched = data.description.toLowerCase().includes(value);
-        const isDirectorSearched = data.director.toLowerCase().includes(value);
-        const isProducerSearched = data.producer.toLowerCase().includes(value);
-        const isReleaseSearched = data.release_date.toLowerCase().includes(value);
-        const isVisible = isTitleSearched || isDescriptionSearched ||
-          isDirectorSearched || isProducerSearched || isReleaseSearched;
-        return {
-          id: data.id,
-          title: data.title,
-          image: data.image,
-          description: data.description,
-          director: data.director,
-          producer: data.producer,
-          release_date: data.release_date,
-          running_time: data.running_time,
-          rt_score: data.rt_score,
-          heart_icon: data.heart_icon,
-          visibility: isVisible
-        }
-      });
-      setFilmsData(updatedFilmData);
-    }
-  };
+    const updatedFilmData = tempFilmData.map(data => {
+      const isTitleSearched = data.title.toLowerCase().includes(searchTextValue);
+      const isDescriptionSearched = data.description.toLowerCase().includes(searchTextValue);
+      const isDirectorSearched = data.director.toLowerCase().includes(searchTextValue);
+      const isProducerSearched = data.producer.toLowerCase().includes(searchTextValue);
+      const isReleaseSearched = data.release_date.toLowerCase().includes(searchTextValue);
+      const isVisible = isTitleSearched || isDescriptionSearched ||
+        isDirectorSearched || isProducerSearched || isReleaseSearched;
+      const visibility = searchTextValue == "" ? true : isVisible;
+      return {
+        id: data.id,
+        title: data.title,
+        image: data.image,
+        description: data.description,
+        director: data.director,
+        producer: data.producer,
+        release_date: data.release_date,
+        running_time: data.running_time,
+        rt_score: data.rt_score,
+        heart_icon: data.heart_icon,
+        visibility: visibility
+      }
+    });
+    setFilmsData(updatedFilmData);
+  }
 
   const tabs = [
     {
@@ -195,9 +173,8 @@ function App() {
         <>
           <div style={{ "display": "flex", "justifyContent": "center" }}>
             <Input
-              placeholder="input search text"
+              placeholder="search for film..."
               allowClear
-
               size="medium"
               onChange={onChange}
               style={{

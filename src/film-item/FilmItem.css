@@ -1,6 +1,13 @@
+.card-properties-container {
+    display: inline-block;
+    width: 33.333%;
+    margin: 35px 0;
+
+}
+
 .card-properties {
-    width: 25%;
-    margin: 2.5%;
+    width: 75%;
+    margin: auto;
     height: 250px;
     border: 1px solid black;
     border-radius: 3px;
@@ -23,6 +30,7 @@
 .card-image-container {
     width: 37%;
     height: 100%;
+    background: rgb(0, 0, 0);
 }
 
 .card-image {
