@@ -3,6 +3,7 @@ import { Layout, Tabs, ConfigProvider, Input } from 'antd';
 import { BookOutlined, HeartOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import FilmItem from '../film-item/FilmItem';
 import { useEffect, useState } from 'react';
+import { highlightSearchedText } from '../util/util';
 
 
 const { Header, Footer, Content } = Layout;
@@ -27,7 +28,7 @@ async function getFilmDataFromAPI() {
   })
 }
 
-function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavoriteDelete }) {
+function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavoriteDelete, tabIdName }) {
   const films = list.map((item) => {
     return {
       id: item.id,
@@ -53,13 +54,14 @@ function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavorit
     />
   );
   return (
-    <div className="flexible-container">{filmItems}</div>
+    <div id={tabIdName} className='flexible-container'>{filmItems}</div>
   )
 }
 
 function App() {
   const [filmData, setFilmsData] = useState([])
   const [favoriteList, setFavoriteList] = useState([]);
+  const [searchedText, setSearchedText] = useState("")
 
   function compareApiAndLocalStorageData(apiResponse) {
     let localStorageData = localStorage.getItem("filmsIdArray");
@@ -83,6 +85,10 @@ function App() {
       })
       .then((response) => { compareApiAndLocalStorageData(response) })
   }, [])
+
+  useEffect(() => {
+    highlightSearchedText(searchedText);
+  }, [searchedText]);
 
   const updateFavoriteList = (id) => {
     const selectedFilm = filmData.find(function (film) {
@@ -131,6 +137,7 @@ function App() {
           list={favoriteList}
           onFavoriteDelete={favoriteDelete}
           onFavoriteValueUpdate={updateFavoriteValue}
+          tabIdName={"favoriteTab"}
         />
       )
     }
@@ -144,9 +151,9 @@ function App() {
       const isDescriptionSearched = data.description.toLowerCase().includes(searchTextValue);
       const isDirectorSearched = data.director.toLowerCase().includes(searchTextValue);
       const isProducerSearched = data.producer.toLowerCase().includes(searchTextValue);
-      const isReleaseSearched = data.release_date.toLowerCase().includes(searchTextValue);
+      const isReleaseDateSearched = data.release_date.toLowerCase().includes(searchTextValue);
       const isVisible = isTitleSearched || isDescriptionSearched ||
-        isDirectorSearched || isProducerSearched || isReleaseSearched;
+        isDirectorSearched || isProducerSearched || isReleaseDateSearched;
       const visibility = searchTextValue == "" ? true : isVisible;
       return {
         id: data.id,
@@ -163,6 +170,7 @@ function App() {
       }
     });
     setFilmsData(updatedFilmData);
+    setSearchedText(searchTextValue);
   }
 
   const tabs = [
@@ -188,6 +196,7 @@ function App() {
             onFavoriteListUpdate={updateFavoriteList}
             onFavoriteValueUpdate={updateFavoriteValue}
             onFavoriteDelete={favoriteDelete}
+            tabIdName={"filmTab"}
           />
         </>
     },

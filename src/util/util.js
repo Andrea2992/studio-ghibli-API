@@ -13,3 +13,15 @@ export const deleteFavoriteToLocalStorage = (id) => {
     storageData.splice(elementIndex, 1);
     localStorage.setItem("filmsIdArray", JSON.stringify(storageData));
 }
+
+export const highlightSearchedText = (text) => {
+    var nodeToChange = document.querySelectorAll('#filmTab [data-searchable]');
+    nodeToChange.forEach((node) => {
+        node.innerHTML = node.innerHTML.replaceAll('<mark>', '');
+        node.innerHTML = node.innerHTML.replaceAll('</mark>', '');
+        const currentText = node.innerHTML;
+        const regex = new RegExp(text, "gi");
+        const newText = currentText.replaceAll(regex, '<mark>$&</mark>');
+        node.innerHTML = newText;
+    })
+}
