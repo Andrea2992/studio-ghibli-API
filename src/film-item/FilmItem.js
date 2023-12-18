@@ -1,5 +1,6 @@
-import { deleteFavoriteToLocalStorage, saveFavoriteToLocalStorage } from '../util/util';
 import './FilmItem.css';
+import'./FilmItemResponsive.css';
+import { deleteFavoriteToLocalStorage, saveFavoriteToLocalStorage } from '../util/util';
 import { HeartTwoTone, HeartFilled } from '@ant-design/icons';
 
 

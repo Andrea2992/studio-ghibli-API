@@ -1,0 +1,72 @@
+@media (min-width: 1px) and (max-width: 346.98px) {
+    .title-paragraph-style {
+        font-size: 34px;
+        text-shadow: #fff 1px 1px 4px;
+        bottom: 12%;
+        line-height: 40px;
+    }
+
+    .header-style {
+        height: 135px;
+    }
+
+    .ant-tabs .ant-tabs-tab .anticon {
+        margin-right: 0px;
+    }
+
+    .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab {
+        padding: 3px 8px;
+    }
+
+    .footer-paragraph {
+        font-size: 10px
+    }
+
+    .ant-input-affix-wrapper{
+        width: 85%;
+    }
+}
+
+@media (min-width: 347px) and (max-width: 629.98px) {
+    .title-paragraph-style {
+        font-size: 25px;
+        text-shadow: #fff 1px 1px 4px;
+        bottom: 12%;
+    }
+
+    .header-style {
+        height: 135px;
+    }
+
+    .ant-tabs .ant-tabs-tab .anticon {
+        margin-right: 0px;
+    }
+
+    .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab {
+        padding: 5px 10px;
+    }
+
+    .footer-paragraph {
+        font-size: 13px
+    }
+
+    .ant-input-affix-wrapper{
+        width: 70%;
+    }
+}
+
+@media (min-width: 630px) and (max-width: 849.98px) {
+    .title-paragraph-style {
+        font-size: 45px;
+    }
+
+    .ant-input-affix-wrapper{
+        width: 400px;
+    }
+}
+
+@media (min-width: 850px) {
+    .ant-input-affix-wrapper{
+        width: 400px;
+    }
+}

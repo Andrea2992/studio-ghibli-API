@@ -1,0 +1,44 @@
+@media (min-width: 1px) and (max-width: 399.98px) {
+    .card-properties-container {
+        width: 90%;
+        margin: 15px 5%;
+    }
+
+    .card-properties {
+        width: 88%;
+        height: 360px;
+        display: block;
+    }
+
+    .card-image-container {
+        width: 100%;
+        height: 55%;
+    }
+
+    .card-text-container {
+        width: 100%;
+        height: 45%;
+    }
+}
+
+@media (min-width: 400px) and (max-width: 849.98px) {
+    .card-properties-container {
+        width: 100%;
+        margin: 35px 0;
+    }
+
+    .card-properties {
+        width: 88%;
+    }
+}
+
+@media (min-width: 850px) and (max-width: 1399.98px) {
+    .card-properties-container {
+        width: 50%;
+        margin: 35px 0;
+    }
+
+    .card-properties {
+        width: 88%;
+    }
+}

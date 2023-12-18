@@ -1,4 +1,5 @@
 import './App.css';
+import './AppResponsive.css';
 import { Layout, Tabs, ConfigProvider, Input } from 'antd';
 import { BookOutlined, HeartOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import FilmItem from '../film-item/FilmItem';
@@ -58,10 +59,32 @@ function FilmList({ list, onFavoriteListUpdate, onFavoriteValueUpdate, onFavorit
   )
 }
 
+const initialTabLabelWidth = () => {
+  if (window.innerWidth >= 1400) {
+    return 500;
+  } else if (window.innerWidth >= 960 & window.innerWidth < 1399.98) {
+    return 250;
+  } else if (window.innerWidth < 959.98) {
+    return 1;
+  };
+}
+
+const initialTabContainerWidth = () => {
+  if (window.innerWidth >= 1400) {
+    return '0 50px';
+  } else if (window.innerWidth >= 960 & window.innerWidth < 1399.98) {
+    return '0 25px';
+  } else if (window.innerWidth < 959.98) {
+    return '0 10px';
+  };
+}
+
 function App() {
-  const [filmData, setFilmsData] = useState([])
+  const [filmData, setFilmsData] = useState([]);
   const [favoriteList, setFavoriteList] = useState([]);
-  const [searchedText, setSearchedText] = useState("")
+  const [searchedText, setSearchedText] = useState("");
+  const [tabLabelWidth, setTabLabelWidth] = useState(initialTabLabelWidth());
+  const [tabContainerWidth, setTabContainerWidth] = useState(initialTabContainerWidth());
 
   function compareApiAndLocalStorageData(apiResponse) {
     let localStorageData = localStorage.getItem("filmsIdArray");
@@ -89,6 +112,19 @@ function App() {
   useEffect(() => {
     highlightSearchedText(searchedText);
   }, [searchedText]);
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth >= 1400) {
+      setTabLabelWidth(500);
+      setTabContainerWidth('0 50px');
+    } else if (window.innerWidth > 960 & window.innerWidth < 1399.98) {
+      setTabLabelWidth(250);
+      setTabContainerWidth('0 25px');
+    } else if (window.innerWidth < 959.98) {
+      setTabLabelWidth(1);
+      setTabContainerWidth('0 10px');
+    }
+  });
 
   const updateFavoriteList = (id) => {
     const selectedFilm = filmData.find(function (film) {
@@ -185,10 +221,6 @@ function App() {
               allowClear
               size="medium"
               onChange={onChange}
-              style={{
-                minWidth: "300px",
-                width: "400px",
-              }}
             />
           </div>
           <FilmList
@@ -222,15 +254,15 @@ function App() {
       <Layout>
         <Header className='header-style'>
           <div className='background-style'></div>
-          <p className='paragraph-style'>
+          <p className='title-paragraph-style'>
             Studio Ghibli Search Films
           </p>
         </Header>
         <Content className='content-style'>
-          <div style={{ "padding": "0 50px" }}>
+          <div style={{ "padding": tabContainerWidth }}>
             <Tabs
               centered={true}
-              tabBarGutter={500}
+              tabBarGutter={tabLabelWidth}
               defaultActiveKey="1"
               type="card"
               size={"medium"}
@@ -238,7 +270,12 @@ function App() {
             />
           </div>
         </Content>
-        <Footer className='footer-style'>Footer</Footer>
+        <Footer className='footer-style'>
+          <div className='content-divider'></div>
+          <p className='footer-paragraph'>Demo site made by Andrea Cok</p>
+          <p className='footer-paragraph'>Thanks to https://ghibliapi.vercel.app/ for API service</p>
+          <p className='footer-paragraph'>All credits goes to © 2005-2023 STUDIO GHIBLI Inc.</p>
+        </Footer>
       </Layout>
     </ConfigProvider>
   );
